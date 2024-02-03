@@ -10,10 +10,10 @@ stop_palworld() {
     echo "Stopping palworld-server..."
     echo_ct_kst
     sleep 10	
-    sudo docker exec -it palworld-server rcon-cli "broadcast This_server_shuts_down_after_60_seconds."
+    sudo docker exec -i palworld-server rcon-cli "broadcast This_server_shuts_down_after_60_seconds."
     sleep 30	
-    sudo docker exec -it palworld-server rcon-cli save
-    sudo docker exec -it palworld-server rcon-cli shutdown
+    sudo docker exec -i palworld-server rcon-cli save
+    sudo docker exec -i palworld-server rcon-cli shutdown
     echo "palworld-server will shut down in 30 seconds."
     sleep 31
     sudo docker stop palworld-server
@@ -29,12 +29,12 @@ start_palworld() {
     echo "palworld-server started!!"
     echo_ct_kst
 	sleep 60
-    sudo docker exec -it palworld-server rcon-cli "broadcast Hello,_Pal_Master.The_server_uptime_is_1_minute."
+    sudo docker exec -i palworld-server rcon-cli "broadcast Hello,_Pal_Master.The_server_uptime_is_1_minute."
 	sleep 60
-    sudo docker exec -it palworld-server rcon-cli "broadcast Hi,_Pal_Master.The_server_uptime_is_2_minute."
+    sudo docker exec -i palworld-server rcon-cli "broadcast Hi,_Pal_Master.The_server_uptime_is_2_minute."
 	sleep 60
-    sudo docker exec -it palworld-server rcon-cli "broadcast Welcome,_Pal_Master.The_server_uptime_is_3_minute."
-    sudo docker exec -it palworld-server rcon-cli save
+    sudo docker exec -i palworld-server rcon-cli "broadcast Welcome,_Pal_Master.The_server_uptime_is_3_minute."
+    sudo docker exec -i palworld-server rcon-cli save
 }
 
 # Function to backup and compress the /home/serverfile/palworld/Pal/Saved/ directory
@@ -46,7 +46,7 @@ backup_palworld() {
     tar -czf "${BACKUP_PATH}" -C /home/serverfile/palworld/Pal/Saved/ .
     echo "Backup and Compression completed!!"
 	sleep 1
-    sudo docker exec -it palworld-server rcon-cli "broadcast A_backup_of_the_server_at_the_current_time_has_been_created."
+    sudo docker exec -i palworld-server rcon-cli "broadcast A_backup_of_the_server_at_the_current_time_has_been_created."
     echo_ct_kst
 }
 
@@ -63,16 +63,16 @@ check_palworld() {
 
     if [ "$used_pct" -gt 80 ]; then
         echo "Memory usage above 80%. Executing save and shutdown commands..."
-        sudo docker exec -it palworld-server rcon-cli "broadcast The_memory_usage_of_the_server_is_too_high."
+        sudo docker exec -i palworld-server rcon-cli "broadcast The_memory_usage_of_the_server_is_too_high."
 		sleep 1
-        sudo docker exec -it palworld-server rcon-cli "broadcast The_server_will_be_restarted_in_60_seconds."
+        sudo docker exec -i palworld-server rcon-cli "broadcast The_server_will_be_restarted_in_60_seconds."
 		sleep 1
-        sudo docker exec -it palworld-server rcon-cli "broadcast Stop_everything_you_are_doing_and_disconnect_from_the_server."
+        sudo docker exec -i palworld-server rcon-cli "broadcast Stop_everything_you_are_doing_and_disconnect_from_the_server."
 		sleep 1
-        sudo docker exec -it palworld-server rcon-cli save
+        sudo docker exec -i palworld-server rcon-cli save
 		sleep 3
-        sudo docker exec -it palworld-server rcon-cli "broadcast See_you_later!"
-        sudo docker exec -it palworld-server rcon-cli shutdown 120
+        sudo docker exec -i palworld-server rcon-cli "broadcast See_you_later!"
+        sudo docker exec -i palworld-server rcon-cli shutdown 120
         echo "Shutdown initiated. Server will restart after a designated delay."
         sleep 61 # Wait for 60 seconds after save before initiating shutdown
         echo "Restarting palworld-server..."
@@ -83,11 +83,11 @@ check_palworld() {
         echo "Memory usage below 80%."
 		echo "Current memory usage: $(awk '/MemTotal/{total=$2}/MemAvailable/{available=$2} END {printf "%.2f", (total-available)/total*100}' /proc/meminfo)%" 
 		sleep 5
-        sudo docker exec -it palworld-server rcon-cli "broadcast The_server_checker_is_complete."
+        sudo docker exec -i palworld-server rcon-cli "broadcast The_server_checker_is_complete."
 		sleep 1
-        sudo docker exec -it palworld-server rcon-cli "broadcast The_server_is_stable_now."
+        sudo docker exec -i palworld-server rcon-cli "broadcast The_server_is_stable_now."
 		sleep 1
-        sudo docker exec -it palworld-server rcon-cli "broadcast Have_a_nice_day,_Pal_masters!!"
+        sudo docker exec -i palworld-server rcon-cli "broadcast Have_a_nice_day,_Pal_masters!!"
 		echo_ct_kst
     fi
     echo_ct_kst
@@ -113,3 +113,4 @@ case "$1" in
         exit 1
         ;;
 esac
+
