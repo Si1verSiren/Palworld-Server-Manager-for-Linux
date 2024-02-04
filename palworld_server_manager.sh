@@ -125,8 +125,6 @@ check_palworld() {
         sudo docker exec -i palworld-server rcon-cli "broadcast The_server_checker_is_complete."
 		sleep 1
         sudo docker exec -i palworld-server rcon-cli "broadcast The_server_is_stable_now."
-		sleep 1
-        sudo docker exec -i palworld-server rcon-cli "broadcast Have_a_nice_day,_Pal_masters!!"
 		echo_ct_kst
     fi
     echo_ct_kst
@@ -155,3 +153,4 @@ case "$1" in
         exit 1
         ;;
 esac
+
