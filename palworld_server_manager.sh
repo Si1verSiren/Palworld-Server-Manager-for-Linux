@@ -37,6 +37,45 @@ start_palworld() {
     sudo docker exec -i palworld-server rcon-cli save
 }
 
+# Function to restart the palworld-server Docker container
+restart_palworld() {
+    echo "Stopping palworld-server..."
+    echo_ct_kst
+    sleep 10	
+    sudo docker exec -i palworld-server rcon-cli "broadcast This_server_shuts_down_after_60_seconds."
+    sleep 30	
+    sudo docker exec -i palworld-server rcon-cli save
+    sudo docker exec -i palworld-server rcon-cli shutdown
+    echo "palworld-server will shut down in 30 seconds."
+    sleep 31
+    sudo docker stop palworld-server
+    echo "palworld-server stopped!!"
+    echo_ct_kst
+	sleep 20
+    echo_ct_kst
+    echo "Backup and Compressing palworld-server files..."
+    TIMESTAMP=$(TZ='Asia/Seoul' date +'%y-%m-%d-%H-%M-%S')
+    BACKUP_PATH="/home/serverfile/backups/${TIMESTAMP}-palworld-backup.tar.gz"
+    tar -czf "${BACKUP_PATH}" -C /home/serverfile/palworld/Pal/Saved/ .
+    echo "Backup and Compression completed!!"
+	sleep 1
+    sudo docker exec -i palworld-server rcon-cli "broadcast A_backup_of_the_server_at_the_current_time_has_been_created."
+    echo_ct_kst
+	sleep 5
+    echo "Starting palworld-server..."
+    echo_ct_kst
+    sudo docker start palworld-server
+    echo "palworld-server started!!"
+    echo_ct_kst
+	sleep 60
+    sudo docker exec -i palworld-server rcon-cli "broadcast Hello,_Pal_Master.The_server_uptime_is_1_minute."
+	sleep 60
+    sudo docker exec -i palworld-server rcon-cli "broadcast Hi,_Pal_Master.The_server_uptime_is_2_minute."
+	sleep 60
+    sudo docker exec -i palworld-server rcon-cli "broadcast Welcome,_Pal_Master.The_server_uptime_is_3_minute."
+    sudo docker exec -i palworld-server rcon-cli save
+}
+
 # Function to backup and compress the /home/serverfile/palworld/Pal/Saved/ directory
 backup_palworld() {
     echo_ct_kst
@@ -102,6 +141,9 @@ case "$1" in
     start)
         start_palworld
         ;;
+    restart)
+        restart_palworld
+        ;;
     backup)
         backup_palworld
         ;;
@@ -113,4 +155,3 @@ case "$1" in
         exit 1
         ;;
 esac
-
